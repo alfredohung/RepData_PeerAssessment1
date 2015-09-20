@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output:
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals throughout the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
 
@@ -14,13 +9,19 @@ The variables included in this dataset are:
 
 
 ### Loading and preprocessing the data
-```{r, echo=TRUE}
+
+```r
 data<-read.csv("activity.csv")
 library(ggplot2)
 ```
 
+```
+## Warning: package 'ggplot2' was built under R version 3.2.1
+```
+
 ### Mean total number of steps taken per day
-```{r, echo=TRUE}
+
+```r
 ## For this part of the assignment, the missing values in the dataset are ignored
 
 ## 1.Calculate the total number of steps taken per day
@@ -41,15 +42,30 @@ g + geom_bar(stat="identity") +
     labs(x="Day (Year = 2012)", y="Total Number of Steps", size = 10) +
     scale_x_discrete(breaks=c("10-02","10-10","10-20","10-30","11-11","11-20","11-29"), 
     labels=c("10-02","10-10","10-20","10-30","11-11","11-20","11-29"))
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+```r
 ## 3.Calculate and report the mean and median of the total number of steps taken per day
 mean(totalsteps$steps, na.rm=T) ## Answer: 10,766.19
-median(totalsteps$steps, na.rm=T) ## Answer: 10,765
+```
 
+```
+## [1] 10766.19
+```
+
+```r
+median(totalsteps$steps, na.rm=T) ## Answer: 10,765
+```
+
+```
+## [1] 10765
 ```
 
 ### Average daily activity pattern
-```{r, echo=TRUE}
+
+```r
 ## 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 avgsteps<-aggregate(.~interval, data=data, mean)
 
@@ -57,26 +73,38 @@ g4 <- ggplot(avgsteps, aes(interval, steps))
 g4 + geom_line() + 
     ggtitle("Average number of steps taken per 5-minute intervals") +
     labs(x="5-minute Interval", y="Average Number of Steps", size = 10)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
 ## 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 maxstep<-which(avgsteps$steps == max(avgsteps$steps))  ## Max step is 206.1698
 avgsteps$interval[maxstep]  ## Answer: 835
+```
 
+```
+## [1] 835
 ```
 
 ### Inputing missing values
-```{r, echo=TRUE}
+
+```r
 ## 1.Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 nasteps<-which(is.na(data$steps))
 length(nasteps) ## Out of 17,568 rows of data, 2,304 NA rows account for 13.1% of the total 
+```
 
+```
+## [1] 2304
 ```
 
 ##### 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
 * To fill in the missing values in the dataset, the strategy is to use the mean for each respective 5-minute interval
 
-```{r, echo=TRUE}
+
+```r
 ## 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 data2<-data
 for (i in 1:length(nasteps)) {
@@ -97,10 +125,24 @@ g2 + geom_bar(stat="identity") +
     labs(x="Day (Year = 2012)", y="Total Number of Steps", size = 10) +
     scale_x_discrete(breaks=c("10-02","10-10","10-20","10-30","11-11","11-20","11-29"), 
     labels=c("10-02","10-10","10-20","10-30","11-11","11-20","11-29"))
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+```r
 mean(totalsteps2$steps) ## Answer: 10,766.19
-median(totalsteps2$steps) ## Answer: 10,766.19
+```
 
+```
+## [1] 10766.19
+```
+
+```r
+median(totalsteps2$steps) ## Answer: 10,766.19
+```
+
+```
+## [1] 10766.19
 ```
 
 ##### Do these values differ from the estimates from the first part of the assignment? 
@@ -113,7 +155,8 @@ median(totalsteps2$steps) ## Answer: 10,766.19
 
 
 ### Differences in activity patterns between weekdays and weekends
-```{r, echo=TRUE}
+
+```r
 ## The dataset with the filled-in missing values is used for this part.
 
 ## 1.Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
@@ -137,6 +180,6 @@ g3 + geom_line() +
     facet_grid(data3.type ~ .) +
     ggtitle("Average number of steps taken per 5-minute intervals") +
     labs(x="5-minute Interval", y="Average Number of Steps", size = 10)
-
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
